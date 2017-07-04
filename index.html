@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>学习任务计划表</title>
+	<link rel="stylesheet" href="./index.css">
+	<script src="./vue.js"></script>
+</head>
+<body>
+	<div class="header-wrapper">
+		<div class="header">学习任务计划表</div>
+	</div>
+	<div class="main">
+		<h3 class="big-title">添加任务：</h3>
+		<input 
+			type="text" 
+			class="task-input" 
+			placeholder="例如：吃饭睡觉打豆豆；  提示：+回车即可添加任务" 
+			@keyup.enter="addTask" 
+			v-model="task"
+		/>
+		<ul class="task-count" v-show="tasks.length">
+			<li>{{ noCheckedLen }}个任务未完成</li>
+			<li class="action">
+				<a href="#alltasks" class="active">所有任务</a>
+				<a href="#finished">已完成的任务</a>
+				<a href="#unfinished">未完成的任务</a>
+			</li>
+		</ul>
+		<h3 class="big-title">任务列表：</h3>
+		<div class="tasks">
+			<span v-show="!tasks.length" class="no-task-tip">还没有添加任何任务</span>
+			<ul class="task-list" v-show="tasks.length">
+				<li v-for="item of filterTasks" class="task" :class="{completed: item.isChecked, editting: editors === item}">
+					<div class="view">
+						<input 
+							type="checkbox" 
+							class="checkbox" 
+							v-model="item.isChecked" 
+						/>
+						<label @click="editTask(item)">{{ item.title }}</label>
+						<a href="javascript: void(0);" class="del-btn" @click="delTask(item)">X</a>
+					</div>
+					<input 
+						type="text" 
+						class="edit" 
+						v-model="item.title" 
+						v-focus="editors === item" 
+						@blur="edittedTask(item)" 
+						@keyup.enter="edittedTask(item)" 
+						@keyup.esc="cancelEditTask(item)" 
+					/>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script src="./index.js"></script>
+</body>
+</html>
